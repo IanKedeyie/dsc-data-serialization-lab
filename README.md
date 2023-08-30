@@ -147,7 +147,7 @@ In the cell below, use the `json` module to load the data from `world_cup_file` 
 
 ```python
 # Replace None with appropriate code
-world_cup_data = None
+world_cup_data = world_cup_data = json.load(world_cup_file)
 
 # Close the file now that we're done reading from it
 world_cup_file.close()
@@ -175,10 +175,17 @@ Now use the `csv` module to load the data from `population_file` into a list of 
 
 ```python
 # Replace None with appropriate code
-population_data = None
+population_file = open("data/country_populations.csv")
+
+# Create a CSV DictReader object
+csv_reader = csv.DictReader(population_file)
+
+# Convert the DictReader object into a list of dictionaries
+population_data = list(csv_reader)
+population_data = 
 
 # Close the file now that we're done reading from it
-population_file.close()
+population_file.close() 
 ```
 
 Make sure the `assert`s pass, ensuring that `population_data` has the correct type.
@@ -321,9 +328,9 @@ matches = []
 # "round" is a built-in function in Python so we use "round_" instead
 for round_ in rounds:
     # Extract the list of matches for this round
-    round_matches = None
+    round_matches = round_['matches']
     # Add them to the overall list of matches
-    None
+    matches.extend(round_matches)
 
 matches[0]
 ```
@@ -364,9 +371,9 @@ teams_set = set()
 
 for match in matches:
     # Add team1 name value to teams_set
-    None
+     teams_set.add(match['team1']['name'])
     # Add team2 name value to teams_set
-    None
+    teams_set.add(match['team2']['name'])
 
 teams = sorted(list(teams_set))
 print(teams)
@@ -440,7 +447,13 @@ Initially `combined_data` will look something like this:
 # Replace None with appropriate code
 
 # Create the variable combined_data as described above
-None
+combined_data = {}
+
+for team in teams:
+    combined_data[team] = {'wins': 0}
+
+# Print a sample element to verify
+print(combined_data['Argentina'])
 ```
 
 Check that the `assert`s pass.
@@ -505,7 +518,17 @@ def find_winner(match):
     Given a dictionary containing information about a match,
     return the name of the winner (or None in the case of a tie)
     """
-    None
+      score1 = match['score1']
+    score2 = match['score2']
+    team1_name = match['team1']['name']
+    team2_name = match['team2']['name']
+    
+    if score1 > score2:
+        return team1_name
+    elif score2 > score1:
+        return team2_name
+    else:
+        return None
 ```
 
 
@@ -524,12 +547,12 @@ Now that we have this helper function, loop over every match in `matches`, find 
 
 for match in matches:
     # Get the name of the winner
-    winner = None
+    winner = find_winner(match)
     # Only proceed to the next step if there was
     # a winner
     if winner:
         # Add 1 to the associated count of wins
-        None
+         combined_data[winner]['wins'] += 1
 
 # Visually inspect the output to ensure the wins are
 # different for different countries
@@ -666,7 +689,12 @@ population_data_filtered = []
 
 for record in population_data:
     # Add record to population_data_filtered if relevant
-    None
+     country_name = record['Country Name']
+    year = record['Year']
+     # Check if the country name is in the teams list and the year is "2018"
+    if country_name in teams and year == "2018":
+        population_data_filtered.append(record)
+
 
 len(population_data_filtered)  # 27
 ```
@@ -737,11 +765,11 @@ for record in population_data:
     # Get normalized country name
     None
     # Add record to population_data_filtered if relevant
-    if None:
+    if normalized_name = normalize_location(record["Country Name"]):
         # Replace the country name in the record
-        None
+        record["Country Name"] = normalized_name
         # Append to list
-        None
+        population_data_filtered.append(record)
 
 len(population_data_filtered)  # 32
 ```
